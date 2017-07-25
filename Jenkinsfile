@@ -9,7 +9,7 @@ pipeline {
             sh 'dotnet restore ./IdentityServer4'
             sh 'dotnet build ./IdentityServer4'
             sh 'dotnet pack ./IdentityServer4'
-            sh 'dotnet nuget push ./IdentityServer4/bin/Debug/IdentityServer4cellarstone.2.0.0.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
+            sh 'dotnet nuget push ./IdentityServer4/bin/Debug/IdentityServer4cellarstone.0.0.1.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
           }
         )
       }
