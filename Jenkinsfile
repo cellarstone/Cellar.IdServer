@@ -6,7 +6,7 @@ pipeline {
       steps {
         parallel(
           "IdentityServer4": {
-            sh 'dotnet restore ./IdentityServer4'
+            sh 'dotnet restore ./IdentityServer4 --configfile ./IdentityServer4/NuGet.Config'
             sh 'dotnet build ./IdentityServer4'
             sh 'dotnet pack ./IdentityServer4'
             sh 'dotnet nuget push ./IdentityServer4/bin/Debug/IdentityServer4cellarstone.0.0.2.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
