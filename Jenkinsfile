@@ -18,15 +18,20 @@ pipeline {
             sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer'
             sh 'dotnet publish ./Cellar.IdServer'
+            
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
+
+            sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/dev/secrets.yaml'
+            sh 'kubectl apply -f k8s/dev/deployments.yaml'
+            sh 'kubectl apply -f k8s/dev/services.yaml'
       }
     }
-    stage('Human Check - deploy to Staging') {
+    stage('Human Check') {
             steps {
-                input "Does the development environment look ok?"
+                input "Can I deploy to Staging ?"
             }
     }
     stage('Staging') {
@@ -35,16 +40,20 @@ pipeline {
             sh 'export ASPNETCORE_ENVIRONMENT=Staging'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer'
+
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
          
-        
+            sh 'gcloud container clusters get-credentials stagingcluster-1 --zone europe-west2-a --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/stag/secrets.yaml'
+            sh 'kubectl apply -f k8s/stag/deployments.yaml'
+            sh 'kubectl apply -f k8s/stag/services.yaml'
       }
     }
-    stage('Human Check - deploy to Production') {
+    stage('Human Check') {
             steps {
-                input "Does the Staging environment look ok?"
+                input "Can I deploy to Production ?"
             }
     }
     stage('Production') {
@@ -53,10 +62,15 @@ pipeline {
             sh 'export ASPNETCORE_ENVIRONMENT=Production'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer'
+
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1'
           
+            sh 'gcloud container clusters get-credentials productioncluster-1 --zone us-west1-a --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/prod/secrets.yaml'
+            sh 'kubectl apply -f k8s/prod/deployments.yaml'
+            sh 'kubectl apply -f k8s/prod/services.yaml'
       }
     }
   }

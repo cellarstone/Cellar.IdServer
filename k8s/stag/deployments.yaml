@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cellar.idserver
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: cellar.idserver
+        component: cellar.idserver
+    spec:
+      containers:
+      - name: cellar.idserver
+        image: eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: registry-key

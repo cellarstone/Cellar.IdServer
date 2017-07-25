@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cellar.idserver
+    component: cellar.idserver
+  name: cellar.idserver
+spec:
+  selector:
+    app: cellar.idserver
+    component: cellar.idserver
+  ports:
+  - port: 80
+    name: http
+  - port: 443
+    name: https
+  type: LoadBalancer
