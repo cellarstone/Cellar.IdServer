@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
-    <!-- <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback> -->
+     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback> 
     <UserSecretsId>aspnet-WebApplication3-279AEFD1-ADCB-4563-A1B7-4764D3F5F53D</UserSecretsId>
   </PropertyGroup>
 
@@ -10,8 +10,10 @@
     <ProjectReference Include="..\IdentityServer4\IdentityServer4.csproj" />
   </ItemGroup>   -->
 
+
+
   <ItemGroup>
-      <PackageReference Include="IdentityServer4Cellarstone" Version="0.0.1" />    
+      <PackageReference Include="IdentityServer4Cellarstone" Version="0.0.2" />    
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.2" />
      <PackageReference Include="Serilog.Sinks.Console" Version="3.0.1" /> 
     <PackageReference Include="BundlerMinifier.Core" Version="2.4.337" /> 
