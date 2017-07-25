@@ -29,7 +29,7 @@ pipeline {
             sh 'kubectl apply -f k8s/dev/services.yaml'
       }
     }
-    stage('Human Check') {
+    stage('Human Check - Staging') {
             steps {
                 input "Can I deploy to Staging ?"
             }
@@ -51,7 +51,7 @@ pipeline {
             sh 'kubectl apply -f k8s/stag/services.yaml'
       }
     }
-    stage('Human Check') {
+    stage('Human Check - Production') {
             steps {
                 input "Can I deploy to Production ?"
             }
