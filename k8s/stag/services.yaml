@@ -4,7 +4,7 @@ metadata:
   labels:
     app: cellar.idserver
     component: cellar.idserver
-  name: cellar.idserver
+  name: idserver
 spec:
   selector:
     app: cellar.idserver
