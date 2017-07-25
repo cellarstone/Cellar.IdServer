@@ -13,7 +13,7 @@ pipeline {
           }
         )
       }
-    },
+    }
     stage('Dotnet') {
       steps {
         parallel(
@@ -26,7 +26,7 @@ pipeline {
           }
         )
       }
-    },
+    }
     stage('Docker') {
       steps {
         parallel(
