@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>OpenID Connect and OAuth 2.0 Framework for ASP.NET Core</Description>
-    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionPrefix>0.0.2</VersionPrefix>
     <Authors>Brock Allen;Dominick Baier</Authors>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>IdentityServer4Cellarstone</AssemblyName>
