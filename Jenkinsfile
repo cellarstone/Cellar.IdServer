@@ -20,8 +20,6 @@ pipeline {
           "Cellar.IdServer": {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'dotnet build ./Cellar.IdServer'
-            sh 'dotnet pack ./Cellar.IdServer'
-            sh 'dotnet nuget push ./Cellar.IdServer/bin/Debug/Cellar.IdServer.0.0.1.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
             sh 'dotnet publish'
           }
         )
