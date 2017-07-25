@@ -4,20 +4,16 @@ pipeline {
     
 	stage('Build IdentityServer4') {
       steps {
-        parallel(
-          "IdentityServer4": {
+        
             sh 'dotnet restore ./IdentityServer4'
             sh 'dotnet build ./IdentityServer4'
             // sh 'dotnet pack ./IdentityServer4'
             // sh 'dotnet nuget push ./IdentityServer4/bin/Debug/IdentityServer4cellarstone.0.0.2.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
-          }
-        )
+          
       }
     }
     stage('Development') {
       steps {
-        parallel(
-          "Cellar.IdServer": {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer'
@@ -25,8 +21,7 @@ pipeline {
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
-          }
-        )
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
       }
     }
     stage('Human Check - deploy to Staging') {
@@ -36,15 +31,14 @@ pipeline {
     }
     stage('Staging') {
       steps {
-        parallel(
-          "Cellar.IdServer": {
+        
             sh 'export ASPNETCORE_ENVIRONMENT=Staging'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer'
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
-          }
+         
         )
       }
     }
@@ -55,16 +49,14 @@ pipeline {
     }
     stage('Production') {
       steps {
-        parallel(
-          "Cellar.IdServer": {
+        
             sh 'export ASPNETCORE_ENVIRONMENT=Production'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer'
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1'
-          }
-        )
+          
       }
     }
   }
