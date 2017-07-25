@@ -13,12 +13,12 @@ spec:
   template:
     metadata:
       labels:
-        app: cellar.idserver
+        app: idserver
         component: cellar.idserver
     spec:
       containers:
-      - name: cellar.idserver
-        image: eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1
+      - name: idserver
+        image: eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1
         imagePullPolicy: Always
         ports:
         - containerPort: 80
