@@ -17,7 +17,7 @@ pipeline {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
-            sh 'dotnet publish ./Cellar.IdServer'
+            sh 'dotnet publish ./Cellar.IdServer --configuration Release'
             
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.1'
