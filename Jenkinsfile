@@ -39,7 +39,7 @@ pipeline {
             sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
          
-        )
+        
       }
     }
     stage('Human Check - deploy to Production') {
