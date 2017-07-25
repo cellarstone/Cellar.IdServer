@@ -6,7 +6,7 @@ pipeline {
       steps {
         parallel(
           "IdentityServer4": {
-            sh 'dotnet restore ./IdentityServer4 --configfile ./IdentityServer4/NuGet.Config'
+            sh 'dotnet restore ./IdentityServer4'
             sh 'dotnet build ./IdentityServer4'
             sh 'dotnet pack ./IdentityServer4'
             sh 'dotnet nuget push ./IdentityServer4/bin/Debug/IdentityServer4cellarstone.0.0.2.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
@@ -18,7 +18,7 @@ pipeline {
       steps {
         parallel(
           "Cellar.IdServer": {
-            sh 'dotnet restore ./Cellar.IdServer'
+            sh 'dotnet restore ./Cellar.IdServer --configfile ./Cellar.IdServer/NuGet.Config'
             sh 'dotnet build ./Cellar.IdServer'
             sh 'dotnet pack ./Cellar.IdServer'
             sh 'dotnet nuget push ./Cellar.IdServer/bin/Debug/Cellar.IdServer.0.0.1.nupkg -k c7afa313-d629-4dc7-84aa-2e658c2a3cce -s https://www.myget.org/F/cellar/api/v2/package'
