@@ -20,7 +20,7 @@ pipeline {
           "Cellar.IdServer": {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'dotnet build ./Cellar.IdServer'
-            sh 'dotnet publish'
+            sh 'dotnet publish ./Cellar.IdServer'
           }
         )
       }
