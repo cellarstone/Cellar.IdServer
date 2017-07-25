@@ -17,7 +17,7 @@
 #  RUN dotnet publish --output /app/ --configuration Release
 
  # Stage 2
- FROM microsoft/aspnetcore:1.1
+ FROM microsoft/aspnetcore:2.0
  WORKDIR /app
  EXPOSE 51111
  COPY . .
