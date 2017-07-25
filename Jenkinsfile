@@ -39,11 +39,11 @@ pipeline {
         
             sh 'export ASPNETCORE_ENVIRONMENT=Staging'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
-            sh 'dotnet publish ./Cellar.IdServer'
-
+            sh 'dotnet publish ./Cellar.IdServer --configuration Release'
+            
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
-            sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1'
+            sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.2'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.2'
          
             sh 'gcloud container clusters get-credentials stagingcluster-1 --zone europe-west2-a --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/stag/secrets.yaml'
@@ -61,11 +61,11 @@ pipeline {
         
             sh 'export ASPNETCORE_ENVIRONMENT=Production'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
-            sh 'dotnet publish ./Cellar.IdServer'
-
+            sh 'dotnet publish ./Cellar.IdServer --configuration Release'
+            
             sh 'docker build -t cellar.idserver ./Cellar.IdServer'
-            sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.1'
+            sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.2'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:prod.0.0.2'
           
             sh 'gcloud container clusters get-credentials productioncluster-1 --zone us-west1-a --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/prod/secrets.yaml'

@@ -19,7 +19,7 @@
  # Stage 2
  FROM microsoft/aspnetcore:1.1
  WORKDIR /app
- EXPOSE 51111
+ EXPOSE 80
  COPY . .
 #  COPY --from=builder /app .
  ENTRYPOINT ["dotnet", "./bin/Release/netcoreapp1.1/publish/Cellar.IdServer.dll"]
