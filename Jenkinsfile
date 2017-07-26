@@ -100,6 +100,9 @@ pipeline {
             sh 'docker build -t nginxidserver ./nginx'
             sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:prod.0.0.1'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:prod.0.0.1'
+
+            sh 'gcloud container clusters get-credentials productioncluster-1 --zone us-west1-a --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/prod/frontend.yaml'
           }
         )
       }
