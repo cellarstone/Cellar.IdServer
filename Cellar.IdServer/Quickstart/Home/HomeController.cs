@@ -5,6 +5,7 @@
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Cellar.IdServer.Quickstart.UI
 {
@@ -12,14 +13,18 @@ namespace Cellar.IdServer.Quickstart.UI
     public class HomeController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
-
-        public HomeController(IIdentityServerInteractionService interaction)
+        private readonly ILogger _logger;
+        public HomeController(IIdentityServerInteractionService interaction,
+        ILogger<HomeController> logger)
         {
             _interaction = interaction;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
+            _logger.LogInformation("HomeController");
+
             return View();
         }
 

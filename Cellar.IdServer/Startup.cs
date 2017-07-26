@@ -9,7 +9,7 @@ using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Http;
 using Cellar.IdServer.Quickstart.UI;
 using Microsoft.AspNetCore.Hosting;
-using Serilog.Sinks.SystemConsole.Themes;
+// using Serilog.Sinks.SystemConsole.Themes;
 using Cellar.IdServer.Configuration;
 
 namespace Cellar.IdServer
@@ -22,7 +22,7 @@ namespace Cellar.IdServer
             //     .MinimumLevel.Verbose()
             //     .Enrich.FromLogContext()
             //     .WriteTo.File(@"identityserver4_log.txt");
-                
+
             // if (environment.IsDevelopment())
             // {
             //     serilog.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate);
@@ -66,8 +66,12 @@ namespace Cellar.IdServer
             return services.BuildServiceProvider(validateScopes: true);
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            loggerFactory
+                    .AddConsole();
+
+
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
