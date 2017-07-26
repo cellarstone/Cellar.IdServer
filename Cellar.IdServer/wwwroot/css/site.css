@@ -9,10 +9,14 @@
   position: relative;
   top: -2px;
   display: inline;
+  max-height: 32px;
+  max-width: 32px;
 }
 .icon {
   position: relative;
   top: -10px;
+  max-height: 64px;
+  max-width: 64px;
 }
 .logged-out iframe {
   display: none;

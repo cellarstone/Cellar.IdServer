@@ -1,29 +1,39 @@
-﻿<div class="welcome-page">
+﻿@using IdentityServer4.Extensions
+@{
+    string name = null;
+    if (!true.Equals(ViewData["signed-out"]))
+    {
+        var user = await Context.GetIdentityServerUserAsync();
+        name = user?.FindFirst("name")?.Value;
+    }
+}
+
+<div class="welcome-page">
     <div class="row page-header">
         <div class="col-sm-10">
             <h1>
-                <img class="icon" src="~/icon.jpg">
-                Welcome to Cellarstone Identity Server
+                <!-- <img class="icon" src="~/CellarstoneIcon.png" style="max-width: 64px; max-height: 64px;"> -->
+                Welcome @name to Cellarstone
                 @*<small>(build {version})</small>*@
             </h1>
         </div>
     </div>
 
-    <div class="row">
+     <div class="row">
         <div class="col-sm-8">
             <p>
-                IdentityServer publishes a
-                <a href="~/.well-known/openid-configuration">discovery document</a>
-                where you can find metadata and links to all the endpoints, key material, etc.
+                Zaregistrujte se
+                <a href="/Account/Register"> na této stránce.</a>
             </p>
         </div>
         <div class="col-sm-8">
             <p>
-                Click <a href="~/grants">here</a> to manage your stored grants.
+                Přihlaste se 
+                <a href="/Account/Login">pomocí svého účtu.</a> 
             </p>
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-sm-8">
             <p>
                 Here are links to the
@@ -31,5 +41,5 @@
                 and <a href="https://github.com/identityserver/IdentityServer4.Samples">ready to use samples</a>.
             </p>
         </div>
-    </div>
+    </div> -->
 </div>
