@@ -19,9 +19,9 @@ pipeline {
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
             
-            sh 'docker build -t cellar.idserver ./Cellar.IdServer'
-            sh 'docker tag cellar.idserver eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.3'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/cellar.idserver:dev.0.0.3'
+            sh 'docker build -t idserver ./Cellar.IdServer'
+            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:dev.0.0.4'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:dev.0.0.4'
 
             sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/dev/secrets.yaml'
