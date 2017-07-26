@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: idserver
-        image: eu.gcr.io/cellarstone-1488228226623/idserver:prod.0.0.8
+        image: eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.8
         imagePullPolicy: Always
         ports:
         - containerPort: 80
