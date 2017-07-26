@@ -22,8 +22,8 @@ pipeline {
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
             
             sh 'docker build -t idserver ./Cellar.IdServer'
-            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:dev.0.0.8'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:dev.0.0.8'
+            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:dev.0.0.9'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:dev.0.0.9'
 
             sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/dev/secrets.yaml'
@@ -55,8 +55,8 @@ pipeline {
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
             
             sh 'docker build -t idserver ./Cellar.IdServer'
-            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.7'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.7'
+            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.8'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.8'
          
             sh 'gcloud container clusters get-credentials stagingcluster-1 --zone europe-west2-a --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/stag/secrets.yaml'
@@ -88,8 +88,8 @@ pipeline {
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
             
             sh 'docker build -t idserver ./Cellar.IdServer'
-            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:prod.0.0.7'
-            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:prod.0.0.7'
+            sh 'docker tag idserver eu.gcr.io/cellarstone-1488228226623/idserver:prod.0.0.9'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/idserver:prod.0.0.9'
           
             sh 'gcloud container clusters get-credentials productioncluster-1 --zone us-west1-a --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/prod/secrets.yaml'
