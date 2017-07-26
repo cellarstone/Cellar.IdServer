@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginxidserver
+    component: nginxidserver
+  name: nginxidserver
+spec:
+  selector:
+    app: nginxidserver
+    component: nginxidserver
+  ports:
+  - port: 80
+    name: http
+  - port: 443
+    name: https
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginxidserver
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: nginxidserver
+        component: nginxidserver
+    spec:
+      containers:
+      - name: nginxidserver
+        image: eu.gcr.io/cellarstone-1488228226623/nginxidserver:stag.0.0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: "secrets"
+          mountPath: "/etc/secrets"
+          readOnly: true
+      imagePullSecrets:
+      - name: registry-key
+      volumes:
+      - name: "secrets"
+        secret: 
+          secretName: "ssl-proxy-secret"

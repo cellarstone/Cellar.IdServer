@@ -14,6 +14,8 @@ pipeline {
     }
     stage('Development') {
       steps {
+        parallel(
+          "IdServer": {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
@@ -27,6 +29,16 @@ pipeline {
             sh 'kubectl apply -f k8s/dev/secrets.yaml'
             sh 'kubectl apply -f k8s/dev/deployments.yaml'
             sh 'kubectl apply -f k8s/dev/services.yaml'
+            },
+          "nginx": {
+            sh 'docker build -t nginxidserver ./nginx'
+            sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.1'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.1'
+
+            sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/dev/frontend.yaml'
+          }
+        )
       }
     }
     stage('Human Check - Staging') {
@@ -36,7 +48,8 @@ pipeline {
     }
     stage('Staging') {
       steps {
-        
+        parallel(
+          "IdServer": {
             sh 'export ASPNETCORE_ENVIRONMENT=Staging'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
@@ -49,6 +62,16 @@ pipeline {
             sh 'kubectl apply -f k8s/stag/secrets.yaml'
             sh 'kubectl apply -f k8s/stag/deployments.yaml'
             sh 'kubectl apply -f k8s/stag/services.yaml'
+            },
+          "nginx": {
+            sh 'docker build -t nginxidserver ./nginx'
+            sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:stag.0.0.1'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:stag.0.0.1'
+
+            sh 'gcloud container clusters get-credentials stagingcluster-1 --zone europe-west2-a --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/stag/frontend.yaml'
+          }
+        )
       }
     }
     stage('Human Check - Production') {
@@ -58,7 +81,8 @@ pipeline {
     }
     stage('Production') {
       steps {
-        
+        parallel(
+          "IdServer": {
             sh 'export ASPNETCORE_ENVIRONMENT=Production'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
@@ -71,6 +95,13 @@ pipeline {
             sh 'kubectl apply -f k8s/prod/secrets.yaml'
             sh 'kubectl apply -f k8s/prod/deployments.yaml'
             sh 'kubectl apply -f k8s/prod/services.yaml'
+            },
+          "nginx": {
+            sh 'docker build -t nginxidserver ./nginx'
+            sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:prod.0.0.1'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:prod.0.0.1'
+          }
+        )
       }
     }
   }

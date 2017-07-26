@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cellar.idserver
+  name: idserver
 spec:
   replicas: 2
   strategy:
@@ -14,11 +14,11 @@ spec:
     metadata:
       labels:
         app: idserver
-        component: cellar.idserver
+        component: idserver
     spec:
       containers:
       - name: idserver
-        image: eu.gcr.io/cellarstone-1488228226623/cellar.idserver:stag.0.0.1
+        image: eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.7
         imagePullPolicy: Always
         ports:
         - containerPort: 80
