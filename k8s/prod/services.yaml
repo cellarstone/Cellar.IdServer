@@ -11,4 +11,4 @@ spec:
     component: idserver
   ports:
    - port: 80
-  type: LoadBalancer
+  type: ClusterIP
