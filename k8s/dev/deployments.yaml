@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cellar.idserver
+  name: idserver
 spec:
   replicas: 2
   strategy:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: idserver
-        component: cellar.idserver
+        component: idserver
     spec:
       containers:
       - name: idserver
