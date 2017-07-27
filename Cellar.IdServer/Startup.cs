@@ -1,21 +1,32 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
+using Microsoft.Extensions.Configuration;
+
+
 using Microsoft.IdentityModel.Tokens;
 using IdentityServer4;
 using IdentityServer4.Validation;
-using Microsoft.AspNetCore.Http;
+
 using Cellar.IdServer.Quickstart.UI;
-using Microsoft.AspNetCore.Hosting;
+
 using Cellar.IdServer.Configuration;
-using Microsoft.Extensions.Configuration;
+
+using System.IO;
+
+
 
 namespace Cellar.IdServer
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -28,11 +39,18 @@ namespace Cellar.IdServer
             Configuration = builder.Build();
         }
 
+
         public IConfigurationRoot Configuration { get; }
         private IHostingEnvironment _env { get; set; }
-        
+
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+
+            services.AddOptions();
+            services.AddSingleton<IConfigurationRoot>((provider) => Configuration);
+
+
             services.AddIdentityServer(options =>
                 {
                     options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
@@ -52,7 +70,7 @@ namespace Cellar.IdServer
                 .AddSecretParser<ClientAssertionSecretParser>()
                 .AddSecretValidator<PrivateKeyJwtSecretValidator>()
                 .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>()
-                .AddCellarUsers(o => o.connectionString = Configuration.GetSection("ConnectionStrings:Cellar.Core.IdentityConnection").Value, Configuration);
+                .AddCellarUsers(Configuration);
 
             services.AddMvc();
 
