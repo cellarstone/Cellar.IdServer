@@ -36,6 +36,14 @@ pipeline {
 
             sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/dev/frontend.yaml'
+          },
+          nginx2: {
+            sh 'docker build -t nginxidserver ./nginx'
+            sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.2'
+            sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.2'
+
+            sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/dev/frontend.yaml'
           }
         )
       }
