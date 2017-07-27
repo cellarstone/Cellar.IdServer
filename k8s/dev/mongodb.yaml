@@ -9,6 +9,7 @@ spec:
     role: mongo
   ports:
   - port: 27017
+    name: http
   type: LoadBalancer
 ---
 kind: StorageClass
