@@ -16,7 +16,7 @@ pipeline {
         parallel (
           idserver: {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
-            // sh 'export ASPNETCORE_ENVIRONMENT=Development'
+            sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
             

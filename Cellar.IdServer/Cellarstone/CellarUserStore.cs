@@ -30,7 +30,7 @@ namespace Cellar.IdServer.Cellarstone
 
             try
             {
-                MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connString));
+                MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl("mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo:27017/"));
                 if (IsSSL)
                 {
                     settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
