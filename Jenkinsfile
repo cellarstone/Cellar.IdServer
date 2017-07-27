@@ -35,6 +35,10 @@ pipeline {
 
             sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/dev/frontend.yaml'
+          },
+          "mongo": {
+            sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/dev/frontend.yaml'
           }
         )
       }
