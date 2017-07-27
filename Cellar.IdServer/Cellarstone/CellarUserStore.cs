@@ -10,6 +10,8 @@ using System.Linq;
 using System.Security.Claims;
 using System;
 using MongoDB.Driver;
+using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace Cellar.IdServer.Cellarstone
 {
@@ -24,9 +26,13 @@ namespace Cellar.IdServer.Cellarstone
 
         private IMongoDatabase _database { get; }
 
-        public CellarUserStore(string connString)
+        private readonly ILogger _logger;
+
+        public CellarUserStore(string connString,
+            ILogger<CellarUserStore> logger)
         {
             //this.ConnectionString = connString;
+            _logger = logger;
 
             try
             {
@@ -56,6 +62,7 @@ namespace Cellar.IdServer.Cellarstone
             }
             catch (Exception ex)
             {
+                LogException(ex);
                 throw new Exception("Can not access to db server.", ex);
             }
         }
@@ -190,6 +197,26 @@ namespace Cellar.IdServer.Cellarstone
             Users.InsertOne(user);
 
             return user;
+        }
+
+
+
+
+        /// </// <summary>
+        /// HELPER return and log exception
+        /// </summary>
+        public void LogException(Exception exception)
+        {
+            Guid errNo = Guid.NewGuid();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(errNo.ToString());
+            sb.AppendLine(exception.Message);
+            if (exception.InnerException != null)
+                sb.AppendLine(exception.InnerException.Message);
+            sb.AppendLine(exception.StackTrace);
+
+            _logger.LogCritical(sb.ToString());
         }
     }
 }
