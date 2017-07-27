@@ -26,7 +26,7 @@ namespace Cellar.IdServer
 {
     public class Startup
     {
-         public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -82,6 +82,12 @@ namespace Cellar.IdServer
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             loggerFactory
+                    .WithFilter(new FilterLoggerSettings
+                    {
+                        { "Microsoft", LogLevel.Warning },
+                        { "System", LogLevel.Warning },
+                        { "Cellar.IdServer", LogLevel.Information }
+                    })
                     .AddConsole();
 
 
