@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: nginxidserver
-        image: eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.1
+        image: eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.2
         imagePullPolicy: Always
         ports:
         - containerPort: 80
