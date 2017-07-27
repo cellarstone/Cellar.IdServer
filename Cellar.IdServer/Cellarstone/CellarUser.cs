@@ -32,7 +32,7 @@ namespace Cellar.IdServer.Cellarstone
         public string Password { get; set; }
 
 
-        public ICollection<string> Roles {get;set;}
+        public ICollection<string> Roles {get;set;} = new List<string>();
 
         // /// <summary>
         // /// Gets or sets the provider name.

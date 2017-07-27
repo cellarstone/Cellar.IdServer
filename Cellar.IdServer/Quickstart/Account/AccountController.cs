@@ -50,6 +50,95 @@ namespace Cellar.IdServer.Quickstart.UI
             _account = new AccountService(interaction, httpContextAccessor, clientStore);
         }
 
+
+        /// <summary>
+        /// Show register page
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            var vm = new RegisterViewModel();
+
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Handle postback from username/password login
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                // issue authentication cookie with subject ID and username
+                var userFromDB = _users.FindByEmail(model.Email);
+
+
+                // user does not exist, so create 
+                if (userFromDB == null)
+                {
+                    // create new user
+                    var newOneUser = new CellarUser
+                    {
+                        Email = model.Email,
+                        Password = model.Password
+                    };
+
+                    newOneUser.Roles.Add("user");
+
+                    // add user to in-memory store
+                    _users.Users.InsertOne(newOneUser);
+                }
+
+
+
+
+
+
+
+
+                // validate username/password against in-memory store
+                if (_users.ValidateCredentials(model.Email, model.Password))
+                {
+                    AuthenticationProperties props = null;
+                    // only set explicit expiration here if persistent. 
+                    // otherwise we reply upon expiration configured in cookie middleware.
+                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                    {
+                        props = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                        };
+                    };
+
+                    // issue authentication cookie with subject ID and username
+                    var user = _users.FindByEmail(model.Email);
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Email, user.Id.ToString(), user.Email));
+                    await HttpContext.Authentication.SignInAsync(user.Id.ToString(), user.Email, props);
+
+                    // make sure the returnUrl is still valid, and if yes - redirect back to authorize endpoint or a local page
+                    if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+
+                    return Redirect("~/");
+                }
+
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Email, "invalid credentials"));
+
+                ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+            }
+
+            // something went wrong, show form with error
+            // var vm = await _account.BuildLoginViewModelAsync(model);
+            return View(model);
+        }
+
+
         /// <summary>
         /// Show login page
         /// </summary>
