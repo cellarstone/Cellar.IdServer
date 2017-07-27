@@ -18,14 +18,16 @@ namespace Cellar.IdServer.Cellarstone
     /// </summary>
     public class CellarUserStore
     {
-        public string ConnectionString { get; set; } = "mongodb://localhost:27017";
+        public string ConnectionString { get; set; } = "";
         public string DatabaseName { get; set; } = "TestIdentityMongo";
         public bool IsSSL { get; set; } = false;
 
         private IMongoDatabase _database { get; }
 
-        public CellarUserStore()
+        public CellarUserStore(string connString)
         {
+            this.ConnectionString = connString;
+
             try
             {
                 MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(ConnectionString));

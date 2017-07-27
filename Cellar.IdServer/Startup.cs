@@ -5,39 +5,32 @@ using System;
 using Microsoft.IdentityModel.Tokens;
 using IdentityServer4;
 using IdentityServer4.Validation;
-// using Serilog;
 using Microsoft.AspNetCore.Http;
 using Cellar.IdServer.Quickstart.UI;
 using Microsoft.AspNetCore.Hosting;
-// using Serilog.Sinks.SystemConsole.Themes;
 using Cellar.IdServer.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace Cellar.IdServer
 {
     public class Startup
     {
-        public Startup(ILoggerFactory loggerFactory, IHostingEnvironment environment)
+        public Startup(IHostingEnvironment env)
         {
-            // var serilog = new LoggerConfiguration()
-            //     .MinimumLevel.Verbose()
-            //     .Enrich.FromLogContext()
-            //     .WriteTo.File(@"identityserver4_log.txt");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            // if (environment.IsDevelopment())
-            // {
-            //     serilog.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate);
-            // }
+            _env = env;
 
-            // loggerFactory
-            //     .WithFilter(new FilterLoggerSettings
-            //     {
-            //         { "IdentityServer4", LogLevel.Debug },
-            //         { "Microsoft", LogLevel.Information },
-            //         { "System", LogLevel.Error }
-            //     })
-            //     .AddSerilog(serilog.CreateLogger());
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
+        public IConfigurationRoot Configuration { get; }
+        private IHostingEnvironment _env { get; set; }
+        
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServer(options =>
@@ -59,12 +52,14 @@ namespace Cellar.IdServer
                 .AddSecretParser<ClientAssertionSecretParser>()
                 .AddSecretValidator<PrivateKeyJwtSecretValidator>()
                 .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>()
-                 .AddCellarUsers();
+                .AddCellarUsers(o => o.connectionString = Configuration.GetSection("ConnectionStrings:Cellar.Core.IdentityConnection").Value, Configuration);
 
             services.AddMvc();
 
             return services.BuildServiceProvider(validateScopes: true);
         }
+
+
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {

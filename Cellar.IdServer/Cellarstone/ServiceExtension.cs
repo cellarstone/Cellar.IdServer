@@ -4,6 +4,7 @@
 
 using Cellar.IdServer.Cellarstone;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -18,9 +19,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The builder.</param>
         /// <param name="users">The users.</param>
         /// <returns></returns>
-        public static IIdentityServerBuilder AddCellarUsers(this IIdentityServerBuilder builder)
+        public static IIdentityServerBuilder AddCellarUsers(this IIdentityServerBuilder builder, IConfigurationRoot config)
         {
-            builder.Services.AddSingleton(new CellarUserStore());
+            var mongoConnString = config.GetSection("MongoDbRepository:ConnectionString").Value;
+
+
+            builder.Services.AddSingleton(new CellarUserStore(mongoConnString));
             builder.AddProfileService<CellarUserProfileService>();
             builder.AddResourceOwnerValidator<CellarUserResourceOwnerPasswordValidator>();
 
