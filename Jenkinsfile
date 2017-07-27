@@ -14,7 +14,7 @@ pipeline {
     stage('Development') {
       steps {
         parallel (
-          IdServer: {
+          idserver: {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
@@ -52,7 +52,7 @@ pipeline {
     stage('Staging') {
       steps {
         parallel(
-          IdServer: {
+          idserver: {
             sh 'export ASPNETCORE_ENVIRONMENT=Staging'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
@@ -89,7 +89,7 @@ pipeline {
     stage('Production') {
       steps {
         parallel(
-          IdServer: {
+          idserver: {
             sh 'export ASPNETCORE_ENVIRONMENT=Production'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
