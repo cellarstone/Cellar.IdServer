@@ -20,6 +20,7 @@ using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using Cellar.IdServer;
 using Cellar.IdServer.Cellarstone;
+using Microsoft.Extensions.Logging;
 
 namespace Cellar.IdServer.Quickstart.UI
 {
@@ -36,18 +37,22 @@ namespace Cellar.IdServer.Quickstart.UI
         private readonly IEventService _events;
         private readonly AccountService _account;
 
+        private readonly ILogger _logger;
+
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IHttpContextAccessor httpContextAccessor,
             IEventService events,
-            CellarUserStore users)
+            CellarUserStore users,
+            ILogger<AccountController> logger)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             _users = users;
             _interaction = interaction;
             _events = events;
             _account = new AccountService(interaction, httpContextAccessor, clientStore);
+            _logger = logger;
         }
 
 
@@ -69,6 +74,10 @@ namespace Cellar.IdServer.Quickstart.UI
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+
+            _logger.LogInformation("Register: " + model.Email + " - " + model.Password);
+
+
             if (ModelState.IsValid)
             {
 
@@ -116,6 +125,8 @@ namespace Cellar.IdServer.Quickstart.UI
 
                     // issue authentication cookie with subject ID and username
                     var user = _users.FindByEmail(model.Email);
+                    _logger.LogInformation("Register: OK - " + user.Id);
+
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Email, user.Id.ToString(), user.Email));
                     await HttpContext.Authentication.SignInAsync(user.Id.ToString(), user.Email, props);
 
@@ -163,6 +174,8 @@ namespace Cellar.IdServer.Quickstart.UI
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
+            _logger.LogInformation("Login: " + model.Email + " - " + model.Password);
+
             if (ModelState.IsValid)
             {
                 // validate username/password against in-memory store
@@ -184,6 +197,8 @@ namespace Cellar.IdServer.Quickstart.UI
                     var user = _users.FindByEmail(model.Email);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Email, user.Id.ToString(), user.Email));
                     await HttpContext.Authentication.SignInAsync(user.Id.ToString(), user.Email, props);
+
+                     _logger.LogInformation("Login: OK");
 
                     // make sure the returnUrl is still valid, and if yes - redirect back to authorize endpoint or a local page
                     if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
@@ -378,9 +393,13 @@ namespace Cellar.IdServer.Quickstart.UI
             // delete local authentication cookie
             await HttpContext.Authentication.SignOutAsync();
 
+
+
             var user = await HttpContext.GetIdentityServerUserAsync();
             if (user != null)
             {
+                _logger.LogInformation("Logout: OK - " + model.LogoutId);
+
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetName()));
             }
 
