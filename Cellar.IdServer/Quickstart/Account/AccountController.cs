@@ -66,7 +66,7 @@ namespace Cellar.IdServer.Quickstart.UI
         /// Handle postback from username/password login
         /// </summary>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -160,7 +160,7 @@ namespace Cellar.IdServer.Quickstart.UI
         /// Handle postback from username/password login
         /// </summary>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
             if (ModelState.IsValid)
@@ -354,7 +354,7 @@ namespace Cellar.IdServer.Quickstart.UI
         /// Handle logout page postback
         /// </summary>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(LogoutInputModel model)
         {
             var vm = await _account.BuildLoggedOutViewModelAsync(model.LogoutId);
