@@ -44,9 +44,9 @@ pipeline {
       }
     }
     stage('Human Check - Staging') {
-            steps {
-                input "Can I deploy to Staging ?"
-            }
+      steps {
+        input "Can I deploy to Staging ?"
+      }
     }
     stage('Staging') {
       steps {
@@ -81,9 +81,9 @@ pipeline {
       }
     }
     stage('Human Check - Production') {
-            steps {
-                input "Can I deploy to Production ?"
-            }
+      steps {
+        input "Can I deploy to Production ?"
+      }
     }
     stage('Production') {
       steps {
