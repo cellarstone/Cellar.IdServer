@@ -37,7 +37,7 @@ pipeline {
             sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/dev/frontend.yaml'
           },
-          nginx2: {
+          mongo: {
             sh 'gcloud container clusters get-credentials developcluster-1 --zone europe-west1-b --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/dev/mongodb.yaml'
           }
@@ -52,7 +52,7 @@ pipeline {
     stage('Staging') {
       steps {
         parallel(
-          "IdServer": {
+          IdServer: {
             sh 'export ASPNETCORE_ENVIRONMENT=Staging'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
@@ -66,13 +66,17 @@ pipeline {
             sh 'kubectl apply -f k8s/stag/deployments.yaml'
             sh 'kubectl apply -f k8s/stag/services.yaml'
           },
-          "nginx": {
+          nginx: {
             sh 'docker build -t nginxidserver ./nginx'
             sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:stag.0.0.2'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:stag.0.0.2'
 
             sh 'gcloud container clusters get-credentials stagingcluster-1 --zone europe-west2-a --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/stag/frontend.yaml'
+          },
+          mongo: {
+            sh 'gcloud container clusters get-credentials stagingcluster-1 --zone europe-west2-a --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/stag/mongodb.yaml'
           }
         )
       }
@@ -85,7 +89,7 @@ pipeline {
     stage('Production') {
       steps {
         parallel(
-          "IdServer": {
+          IdServer: {
             sh 'export ASPNETCORE_ENVIRONMENT=Production'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
             sh 'dotnet publish ./Cellar.IdServer --configuration Release'
@@ -99,13 +103,17 @@ pipeline {
             sh 'kubectl apply -f k8s/prod/deployments.yaml'
             sh 'kubectl apply -f k8s/prod/services.yaml'
           },
-          "nginx": {
+          nginx: {
             sh 'docker build -t nginxidserver ./nginx'
             sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:prod.0.0.2'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:prod.0.0.2'
 
             sh 'gcloud container clusters get-credentials productioncluster-1 --zone us-west1-a --project cellarstone-1488228226623'
             sh 'kubectl apply -f k8s/prod/frontend.yaml'
+          },
+          mongo: {
+            sh 'gcloud container clusters get-credentials productioncluster-1 --zone us-west1-a --project cellarstone-1488228226623'
+            sh 'kubectl apply -f k8s/prod/mongodb.yaml'
           }
         )
       }
