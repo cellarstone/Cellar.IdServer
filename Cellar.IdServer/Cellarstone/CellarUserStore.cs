@@ -28,7 +28,7 @@ namespace Cellar.IdServer.Cellarstone
 
         private readonly ILogger _logger;
 
-        public CellarUserStore(string connString,
+        public CellarUserStore(
             ILogger<CellarUserStore> logger)
         {
             //this.ConnectionString = connString;

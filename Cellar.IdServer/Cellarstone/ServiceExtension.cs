@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var mongoConnString = config.GetSection("MongoDbRepository:ConnectionString").Value;
 
 
-            builder.Services.AddSingleton(new CellarUserStore(mongoConnString));
+            builder.Services.AddSingleton<CellarUserStore>();
             builder.AddProfileService<CellarUserProfileService>();
             builder.AddResourceOwnerValidator<CellarUserResourceOwnerPasswordValidator>();
 
