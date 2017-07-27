@@ -14,7 +14,7 @@ pipeline {
     stage('Development') {
       steps {
         parallel (
-          "IdServer": {
+          IdServer: {
             sh 'dotnet restore ./Cellar.IdServer --configfile NuGet.Config'
             sh 'export ASPNETCORE_ENVIRONMENT=Development'
             sh 'dotnet build ./Cellar.IdServer --configuration Release'
@@ -29,7 +29,7 @@ pipeline {
             sh 'kubectl apply -f k8s/dev/deployments.yaml'
             sh 'kubectl apply -f k8s/dev/services.yaml'
           },
-          "nginx": {
+          nginx: {
             sh 'docker build -t nginxidserver ./nginx'
             sh 'docker tag nginxidserver eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.2'
             sh 'gcloud docker -- push eu.gcr.io/cellarstone-1488228226623/nginxidserver:dev.0.0.2'
