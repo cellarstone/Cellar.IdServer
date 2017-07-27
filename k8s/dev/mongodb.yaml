@@ -5,11 +5,10 @@ metadata:
   labels:
     name: mongo
 spec:
-  ports:
-  - port: 27017
-    targetPort: 27017
   selector:
     role: mongo
+  ports:
+  - port: 27017
   type: LoadBalancer
 ---
 kind: StorageClass
