@@ -18,6 +18,9 @@
 
  # Stage 2
  FROM microsoft/aspnetcore:1.1
+
+ENV ASPNETCORE_ENVIRONMENT="Development"
+
  WORKDIR /app
  EXPOSE 80
  COPY . .

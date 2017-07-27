@@ -18,7 +18,7 @@ namespace Cellar.IdServer.Cellarstone
     /// </summary>
     public class CellarUserStore
     {
-        public string ConnectionString { get; set; } = "";
+        //public string ConnectionString { get; set; } = "";
         public string DatabaseName { get; set; } = "TestIdentityMongo";
         public bool IsSSL { get; set; } = false;
 
@@ -26,11 +26,11 @@ namespace Cellar.IdServer.Cellarstone
 
         public CellarUserStore(string connString)
         {
-            this.ConnectionString = connString;
+            //this.ConnectionString = connString;
 
             try
             {
-                MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(ConnectionString));
+                MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connString));
                 if (IsSSL)
                 {
                     settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
