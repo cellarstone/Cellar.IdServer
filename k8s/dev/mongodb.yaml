@@ -5,12 +5,12 @@ metadata:
   labels:
     name: mongo
 spec:
-  selector:
-    role: mongo
   ports:
   - port: 27017
-    name: http
-  type: LoadBalancer
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
 ---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
