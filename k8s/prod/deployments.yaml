@@ -20,6 +20,9 @@ spec:
       - name: idserver
         image: eu.gcr.io/cellarstone-1488228226623/idserver:prod.0.0.10
         imagePullPolicy: Always
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Staging
         ports:
         - containerPort: 80
       imagePullSecrets:

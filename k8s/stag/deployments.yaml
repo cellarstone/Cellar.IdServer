@@ -20,6 +20,9 @@ spec:
       - name: idserver
         image: eu.gcr.io/cellarstone-1488228226623/idserver:stag.0.0.9
         imagePullPolicy: Always
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
         ports:
         - containerPort: 80
       imagePullSecrets:
