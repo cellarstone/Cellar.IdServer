@@ -10,12 +10,11 @@
     <ProjectReference Include="..\IdentityServer4\IdentityServer4.csproj" />
   </ItemGroup>   
 
-
   <ItemGroup>
     <PackageReference Include="BundlerMinifier.Core" Version="2.4.337" /> 
-    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" /> 
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="1.1.2" /> 
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Redis" Version="0.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Redis" Version="0.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="1.1.2" />
