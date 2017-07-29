@@ -79,6 +79,15 @@ namespace Cellar.IdServer
                 .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>()
                 .AddCellarUsers(Configuration);
 
+
+
+            // When you also use distributecache in Redis
+            // services.AddDistributedRedisCache(options =>
+            //  {
+            //      options.Configuration = host;
+            //  });
+
+
             services.AddMvc();
 
             return services.BuildServiceProvider(validateScopes: true);
